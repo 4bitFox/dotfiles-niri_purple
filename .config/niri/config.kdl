@@ -19,16 +19,18 @@ input {
     touchpad {
         tap
         drag true
-        // drag-lock
+        drag-lock
         natural-scroll
         accel-speed 0.2
         accel-profile "flat"
         scroll-method "two-finger"
+        scroll-factor 0.5
     }
 
     mouse {
         accel-speed 0.2
         accel-profile "flat"
+        middle-emulation
     }
 
     // Make the mouse warp to the center of newly focused windows.
@@ -42,17 +44,24 @@ input {
 output "BOE 0x09E5 Unknown" { // Internal Screen
     mode "2560x1440@165.003"
     variable-refresh-rate
-    scale 1.25
+    scale 1.5
     transform "normal"
     position x=0 y=0
     focus-at-startup
 }
 
-output "JVC FPDEUFT4 0x01010101" { // JVC TV
+output "Samsung Electric Company SAMSUNG 0x00000001" { // Samsung TV Livingroom
     mode "1920x1080@60.000"
+    scale 1.5
+    transform "normal"
+    position x=-1280 y=0
+}
+
+output "MS Telematica XGIMI TV 0x00000001" { // XGIMI Beamer
+    mode "2288x1430@61.015"
     scale 2
     transform "normal"
-    position x=544 y=-540
+    position x=452 y=-715
 }
 
 // Settings that influence how windows are positioned and sized.
@@ -110,18 +119,19 @@ layout {
 // Spawn processes at startup.
 spawn-at-startup "waybar" // Bar
 spawn-at-startup "swww-daemon" // Wallpaper
+spawn-at-startup "mako" // Notifications
+spawn-at-startup "fuzzel" // Launcher
 spawn-at-startup "xwayland-satellite" // XWayland
-spawn-at-startup "pasystray" // Audio
+spawn-at-startup "/var/home/alya/.config/niri/battery-low-warning.bash" // Low battery notification
+// spawn-at-startup "pasystray" // Audio
 // spawn-at-startup "nm-applet" // Network
 spawn-at-startup "bash" "-c" "sleep 1 && nm-applet"
 // spawn-at-startup "blueman-applet" // Bluetooth
 spawn-at-startup "bash" "-c" "sleep 2 && blueman-applet"
 spawn-at-startup "system-config-printer-applet" // Printer
 spawn-at-startup "systemctl" "--user" "start" "plasma-polkit-agent.service" // Polkit
-spawn-at-startup "mako" // Notifications
-spawn-at-startup "fuzzel" // Launcher
-spawn-at-startup "/var/home/cvetkofabian/.local/opt/DavMail/davmail" // DavMail
-// spawn-at-startup "/usr/lib/protonmail/bridge/proton-bridge" "--no-window" // Proton Mail Bridge
+spawn-at-startup "/var/home/alya/.local/opt/DavMail/davmail" // DavMail
+spawn-at-startup "bash" "-c" "sleep 3 && /opt/tuxedo-control-center/tuxedo-control-center --tray" // Tuxedo Control Center
 spawn-at-startup "bash" "-c" "sleep 5 && /usr/lib/protonmail/bridge/proton-bridge --no-window" // Proton Mail Bridge
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -192,7 +202,19 @@ window-rule {
     match app-id=r"org.mozilla.firefox"
     match title="View Screencast — Mozilla Firefox"
     open-maximized true
-    // block-out-from "screencast"
+    block-out-from "screencast"
+}
+
+window-rule {
+    match app-id=r"Waydroid"
+    default-column-width { proportion 0.31640625; }
+}
+
+window-rule {
+    match title="Windows 11 dGPU"
+    open-fullscreen true
+    default-column-width { proportion 1.777777778; }
+    default-window-height { proportion 1.0; }
 }
 
 
@@ -214,7 +236,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal" { spawn "alacritty"; }
     Mod+D hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
-    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-f" "-F" "-i" "/var/home/cvetkofabian/Pictures/Wallpaper.png"; }
+    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-f" "-F" "-i" "/var/home/alya/Pictures/Wallpaper.png"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "bash" "-c" "niri msg action power-off-monitors && hyprlock"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
@@ -223,12 +245,12 @@ binds {
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
-    XF86AudioRaiseVolume  allow-when-locked=true { spawn "/var/home/cvetkofabian/.config/niri/audio-volume.bash" "raise"; }
-    XF86AudioLowerVolume  allow-when-locked=true { spawn "/var/home/cvetkofabian/.config/niri/audio-volume.bash"; }
+    XF86AudioRaiseVolume  allow-when-locked=true { spawn "/var/home/alya/.config/niri/audio-volume.bash" "raise"; }
+    XF86AudioLowerVolume  allow-when-locked=true { spawn "/var/home/alya/.config/niri/audio-volume.bash"; }
     XF86AudioMute         allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
 //    XF86AudioMicMute      allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "/var/home/cvetkofabian/.config/niri/screen-brightness.bash" "increase"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "/var/home/cvetkofabian/.config/niri/screen-brightness.bash"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "/var/home/alya/.config/niri/screen-brightness.bash" "increase"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "/var/home/alya/.config/niri/screen-brightness.bash"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
@@ -470,13 +492,13 @@ hotkey-overlay {
 
 layer-rule {
     match namespace="swww"
+    match at-startup=true
     place-within-backdrop true
 }
 
 // Block out notifications from screencast and capture
 layer-rule {
     match namespace="^notifications$"
-    
     block-out-from "screen-capture"
 }
 
@@ -490,11 +512,8 @@ overview {
 environment {
     DISPLAY ":0" // XWayland
     ELECTRON_OZONE_PLATFORM_HINT "auto" // Run Electron-based apps with Wayland
-    XDG_CURRENT_DESKTOP "niri"
-    XDG_SESSION_TYPE "wayland"
-    QT_QPA_PLATFORM "wayland"
     MOZ_ENABLE_WAYLAND "1"
-    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    QT_QPA_PLATFORM "wayland;xcb"
 }
 
 // Laptop lid
