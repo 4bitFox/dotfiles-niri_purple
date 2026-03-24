@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ACTION="$*"
-cd /var/home/cvetkofabian/.config/niri || exit 1
+cd /var/home/alya/.config/niri || exit 1
 
 CURRENT=$(brightnessctl g)
 MAX=$(brightnessctl m)
@@ -46,3 +46,4 @@ CURRENT_PCT=$(echo "scale=0; ($CURRENT*100 + $MAX/2)/$MAX" | bc)
 
 ICON=""
 ./qs-notification.bash "$ICON Brightness set to ${CURRENT_PCT}%"
+

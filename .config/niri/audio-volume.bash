@@ -2,7 +2,7 @@
 
 ACTION="$*"
 
-cd /var/home/cvetkofabian/.config/niri
+cd /var/home/alya/.config/niri
 
 if [[ "$ACTION" == "raise" ]]; then
     wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+
