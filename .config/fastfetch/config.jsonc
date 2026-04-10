@@ -17,9 +17,10 @@
     "width": null,
     "height": null,
     "padding": {
-      "top": 0,
+      "top": 1,
       "left": 1,
-      "right": 2
+      "right": 0,
+      "bottom": 0
     },
     "printRemaining": true,
 //    "preserveAspectRatio": false,
@@ -35,13 +36,13 @@
     "pipe": false,
     "showErrors": false,
     "disableLinewrap": true,
-    "hideCursor": false,
+    "hideCursor": true,
     "separator": ": ",
     "color": {
-      "keys": "",
-      "title": "",
-      "output": "",
-      "separator": ""
+      "keys": "#C2861B",
+      "title": "#DE9A21",
+      "output": "#8F6417",
+      "separator": "#C2861B"
     },
     "brightColor": true,
     "duration": {
@@ -67,7 +68,7 @@
     "percent": {
       "type": [
         "num",
-        "num-color"
+        // "num-color"
       ],
       "ndigits": 0,
       "color": {
@@ -119,26 +120,27 @@
     "dsForceDrm": false
   },
   "modules": [
+    "break",
     {
       "type": "title",
       "key": " ",
       "keyIcon": "",
       "fqdn": false,
       "color": {
-        "user": "",
-        "at": "",
-        "host": ""
+        "user": "#DE9A21",
+        "at": "#DE9A21",
+        "host": "#DE9A21"
       }
     },
     {
       "type": "separator",
       "string": "-",
-      "outputColor": "",
+      "outputColor": "#8F6417",
       "times": 0
     },
     {
       "type": "os",
-      "keyIcon": ""
+      "keyIcon": "",
     },
     {
       "type": "host",
@@ -168,7 +170,7 @@
       "type": "display",
       "keyIcon": "󰍹",
       "compactType": "none",
-      "preciseRefreshRate": false,
+      "preciseRefreshRate": true,
       "order": null
     },
     {
@@ -206,9 +208,15 @@
       "keyIcon": ""
     },
     {
+      "type": "command",
+      "key": "Terminal Font",
+      "keyIcon": "",
+      "text": "fc-match -f '%{family}' monospace"
+    },
+    /* {
       "type": "terminalfont",
       "keyIcon": ""
-    },
+    }, */
     {
       "type": "cpu",
       "keyIcon": "",
@@ -286,6 +294,7 @@
       "type": "battery",
       "keyIcon": "",
       "temp": false,
+      "key": "Battery",
       "percent": {
         "green": 50,
         "yellow": 20,
@@ -296,11 +305,12 @@
       "type": "poweradapter",
       "keyIcon": "󰚥"
     },
-    {
+    /* {
       "type": "locale",
       "keyIcon": ""
-    },
-    "break",
+    }, */
+    // "break",
+    /*
     {
       "type": "colors",
       "key": " ",
@@ -314,6 +324,6 @@
           15
         ]
       }
-    }
+    } */
   ]
 }
